@@ -131,10 +131,24 @@ const getVisibleExpenses = (expenses, { text, sortBy, startDate, endDate }) => {
       typeof startDate !== "number" || expense.createdAt >= startDate;
     const endDateMatch =
       typeof endDate !== "number" || expense.createdAt <= endDate;
-    const textMatch = true;
+      
+      const textMatch = 
+      expense.description.toLowerCase().includes(text.toLowerCase());
 
+    //figure out if expense.description has the text variable string inside of it
+    //includes method
+    //convert both strings to lower case
     return startDateMatch && endDateMatch && textMatch;
+  }).sort((a,b) => {
+    if(sortBy === 'date'){
+      return a.createdAt < b.createdAt ? 1: -1
+    }
+    if(sortBy ==='amount'){
+      return a.amount < b.amount ? 1: -1
+    }
   });
+  //sortBy -> amount
+  //put the one with a greater amount first
 };
 
 //Store creation
@@ -153,7 +167,7 @@ store.subscribe(() => {
 });
 
 const expenseOne = store.dispatch(
-  addExpense({ description: "Rent", amount: 100, createdAt: 1000 })
+  addExpense({ description: "Rent", amount: 100, createdAt: -21000})
 );
 const expenseTwo = store.dispatch(
   addExpense({ description: "Coffee", amount: 300, createdAt: -1000 })
@@ -166,14 +180,14 @@ const expenseTwo = store.dispatch(
 // store.dispatch(setTextFilter("rent"));
 // store.dispatch(setTextFilter());
 
-// store.dispatch(sortByAmount());
+store.dispatch(sortByAmount());
 // store.dispatch(sortByDate());
 
 // store.dispatch(setStartDate(125));
-store.dispatch(setStartDate(0));
+// store.dispatch(setStartDate(0));
 
 // store.dispatch(setEndDate(443));
-store.dispatch(setEndDate(999));
+// store.dispatch(setEndDate(999));
 
 const demoState = {
   expenses: [
@@ -193,13 +207,13 @@ const demoState = {
   }
 };
 
-const user = {
-  name: "Jen",
-  age: 24
-};
+// const user = {
+//   name: "Jen",
+//   age: 24
+// };
 
-console.log({
-  ...user,
-  location: "Philly",
-  name: "Matt"
-});
+// console.log({
+//   ...user,
+//   location: "Philly",
+//   name: "Matt"
+// });
